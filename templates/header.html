@@ -1,0 +1,47 @@
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/">易读</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="easyreading_bar">
+    <ul class="nav navbar-nav">
+      <li><a href="/">首页</a></li>
+      <li class="dropdown">
+        <a href="/" class="dropdown-toggle" data-toggle="dropdown">分类<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+	{% for category in categories %}
+          <li><a href="{% url book_category category.id %}">{{ category.name }}</a></li>
+	{% endfor %}
+        </ul>
+      </li>
+    </ul>
+    <form class="navbar-form navbar-left" role="search" action="{% url search %}" method="GET">
+      <div class="form-group">
+        <input type="text" class="form-control" name="title" placeholder="搜图书标题，ISBN">
+      </div>
+      <button type="submit" class="btn btn-default">搜索</button>
+    </form>
+    {%  if user.is_authenticated %}
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url account %}">我的帐号</a></li>
+    <li><a href="{% url user_logout %}">退出</a></li>
+    </ul>
+    {% else %}
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url user_login %}">登录</a></li>
+    <li><a href="{% url register %}">注册</a></li>	 
+    </ul>
+    {% endif %}
+   </div>
+  </div><!-- /.navbar-collapse -->
+</nav>
+

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} {{ author.name }} {% endblock %}
+
+{% block content %}
+
+<h2>{{ author.name }}</h2>
+<p>简介:<p>
+{% load markup %}
+<p> 
+{{ author.brief_desc|markdown}} </p><br>
+<p>作品:<br>
+{% for book in book_list %}
+<a href="{% url book_show book.id %}">{{ book.caption }}</a><br>
+{% endfor %}
+</p>
+{% endblock %}
+
+

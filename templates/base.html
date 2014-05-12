@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="easy-reading with django"/>
+<meta name="author" content="Vagrant Wong">
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/favicon.ico">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<title> {% block title %} 易读{% endblock %}</title>
+</head>
+
+<body>
+<div id="wrap">
+{% include "header.html" %}
+{% block body %}
+<div class="container">
+	<div id="content" class="row row-offcanvas row-offcancas-right">
+		<div class="col-xs-12 col-sm-9">
+		{% block content %}
+		{% endblock %}
+		</div>
+		
+		<div id="sidebar" class="col-xs-6 col-sm-3 sidebar-offcanvas">
+		{% block aside %}
+		{% include "aside.html" %}
+		{% endblock %}
+		</div>
+	</div>
+</div>
+</div>
+
+{% endblock %}
+{% include "footer.html" %}
+</script>
+</body>
+</html>
+
+

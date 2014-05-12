@@ -1,0 +1,32 @@
+    html, body{
+      height: 100%;
+    }
+
+    body {
+      background-color: #F5F5F5;
+    }
+	
+    p{
+	text-indent: 2em;
+	line-height: 1.8;
+   }
+    .container {
+	width: 800px;
+	background-color: #FFFFF0;
+        font: 20px "Helvetica Neue",Helvetica,"Lucida Grande","Luxi Sans",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei","Wenquanyi Micro Hei","WenQuanYi Micro Hei Mono","WenQuanYi Zen Hei","WenQuanYi Zen Hei Mono",LiGothicMed;
+	}
+
+    .container .credit{
+	margin: 20px 0;
+	text-align: center;
+	}
+
+     .center-block {
+ 	 display: block;
+  	margin-left: auto;
+ 	 margin-right: auto;
+	}
+   
+
+
+

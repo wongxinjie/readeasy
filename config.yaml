@@ -1,0 +1,11 @@
+name: reader
+version: 1
+
+libraries:
+- name: "django"
+  version: "1.4"
+
+handler:
+- url: /static/
+  static_path: static
+

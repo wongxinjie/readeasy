@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} {{ book.caption }} {% endblock %}
+
+{% block content %}
+<blockquote>
+<h2>{{ book.caption }}</h2>
+</blockquote>
+<h5>作者:&nbsp;&nbsp;
+{% for author in book.authors.all %}
+<a href="{% url book_author author.id %}"> {{ author.name }}</a> &nbsp;&nbsp;
+{% endfor %}
+</h5>
+<h5>ISBN: &nbsp;&nbsp;{{ book.isbn }}</h5>
+<p>简介:</p>
+{% load markup %}
+<p>{{ book.brief_desc|markdown }}</p>
+{% if user.is_authenticated %}
+<p><a href="{% url collect book.id %}" class="btn btn-info btn-sm pull-right">收藏</a></p>
+<br/></br>
+{% endif %}
+<p>目录</p>
+<p>
+{% for content in content_list %}
+<a href="{% url read_page content.id %}" target="_blank"> {{ content.title }}</a><br>
+{% endfor %}
+</p>
+{% endblock %}
+
+

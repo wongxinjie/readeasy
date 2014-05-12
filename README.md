@@ -1,0 +1,2 @@
+易读
+一个用django+bootstrap3搭建的一个在线的电子书阅读Web App

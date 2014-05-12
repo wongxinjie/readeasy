@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="easy-reading with django"/>
+<meta name="author" content="Vagrant Wong">
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/css/base.css">
+<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/favicon.ico">
+<style>
+	#content{
+		width: 800px;
+	}
+</style>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<title> 关于易读</title>
+</head>
+
+<body>
+<div id="wrap">
+{% include "header.html" %}
+<div class="container">
+<div id="content">
+<blockquote>
+<p>关于易读</p>
+</blockquote>
+<p>易读，是一个实验性的在线电子书阅读网站，追求的是纯净、免费的阅读体验。书不多，会慢慢添加，不会有网络小说。阅读体验也会慢慢的改进。</p><br><br>
+<blockquote>
+<p>易读使用</p>
+</blockquote>
+<p>登录之后的用户能使用的功能有收藏、以及查看阅读历史。<br>
+注册易只需几秒钟，而且用户的密码是加密存储的，可以保证安全。</p><br><br>
+<blockquote>
+<p>内容来源</p>
+</blockquote>
+<p>易读站点上的所有图书内容都来源与网络，若侵犯到了您的权利，请联系我们。</p>
+</div>
+</div>
+</div>
+{% include "footer.html" %}
+</body>
+</html>
+
+
+
+

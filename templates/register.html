@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load bootstrap_toolkit %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="easy-reading with django"/>
+<meta name="author" content="Vagrant Wong">
+{% bootstrap_stylesheet_tag %}
+{% bootstrap_stylesheet_tag "responsive" %}
+<link rel = "stylesheet" href="/static/css/base.css">
+<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/favicon.ico">
+<style type="text/css">
+      .container{
+		width: 600px;
+	}
+</style>
+{% bootstrap_javascript_tag %}
+<title>注册</title>
+</head>
+<body>
+<div id="wrap">
+<div class="container">
+{% if account_error %}
+	<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">x</button>
+		<h4>错误!</h4>请检查输入
+	</div>
+{% endif %}
+<h2 style="text-align:center">易读</h2>
+<div class="well">
+<form class="form-horizontal" action="{% url register %}" method="post">{% csrf_token %}
+	{{ form|as_bootstrap:"horizontal" }}
+	<p class="form-actions">
+	<input type="submit" value="注册" class="btn btn-info">
+	</p>
+</form>
+</div>
+</div>
+</div>
+{% include "footer.html" %}
+</body>
+</html>
+
+
+

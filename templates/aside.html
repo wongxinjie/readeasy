@@ -1,0 +1,16 @@
+{% if user.is_authenticated %}
+	<h3 style="text-align:center">易 迹</h3>
+	<div class="list-group">
+	<center>
+	<a href="{% url view_collection %}" class="list-group-item">我的收藏</a>
+	<a href="{% url view_history %}" class="list-group-item">阅读历史</a>
+	</center>
+	</div>
+{% else %}
+<blockquote>
+<p>首先，易读是一个在线阅读网站；</p>
+<p>然后， 登录之后有更多的功能。</p>
+</blockquote>
+{% endif %}
+
+
