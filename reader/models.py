@@ -64,15 +64,27 @@ class CollectionItem(models.Model):
 		get_latest_by = 'add_date'
 		ordering = ['-add_date']
 
-class ReadHistoryItem(models.Model):
+
+class BookmarkItem(models.Model):
 	user_num = models.IntegerField(null=True)
 	content = models.ForeignKey(Content)
-	read_time = models.DateTimeField(auto_now_add = True)
-
-	class Meta:
-		get_latest_by = 'read_time'
-		ordering = ['-read_time']
-
+	dis_add = models.BooleanField(default=False)
+	add_time = models.DateTimeField(auto_now_add = True)
 	
+	class Meta:
+		get_latest_by = 'add_time'
+		ordering = ['-add_time']
+
+class NoteItem(models.Model):
+	user_num = models.IntegerField(null = True)
+	content = models.ForeignKey(Content)
+	dis_add = models.BooleanField(default=False)
+	text_content = models.TextField()
+	edit_time = models.DateTimeField(auto_now_add = True)
+	
+	class Meta:
+		get_latest_by = 'edit_time'
+		ordering = ['-edit_time']
+
 
 

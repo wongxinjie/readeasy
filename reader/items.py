@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from models import CollectionItem, ReadHistoryItem
+from models import CollectionItem, BookmarkItem, NoteItem
 from datetime import datetime
 
 class Collection(object):
@@ -7,8 +7,6 @@ class Collection(object):
 	def __init__(self, *args, **kwargs):
 		self.items = list(CollectionItem.objects.all())
 
-	def get_items(self):
-		return self.items
 	
 	def add_book(self, user_num, book):
 		for item in self.items:
@@ -36,36 +34,81 @@ class Collection(object):
 		return collections
 
 
-#	def extend_collection(self, books):
-#		self.items.extend(books)
 
+class Bookmark(object):
 
-class ReadHistory(object):
-	
 	def __init__(self, *args, **kwargs):
-		self.items= list(ReadHistoryItem.objects.all())
+		self.items = list(BookmarkItem.objects.all())
 	
-	def get_items(self):
-		return self.items
-
-	def add_content(self, user_num, content):
+	def add_bookmark(self, user_num, content):
 		for item in self.items:
 			if item.content.id == content.id and item.user_num == user_num:
-				ReadHistoryItem.objects.filter(user_num=user_num, content_id__exact=content.id).update(read_time=datetime.now())
-				return 
-		read_history_item = ReadHistoryItem(user_num=user_num, content=content)
-		read_history_item.save()
-		self.items.append(read_history_item)
-	
-	def get_user_history(self, user_num):
-		histories = []
+				content_list = BookmarkItem.objects.filter(user_num=user_num, content_id__exact=content.id)
+				content_list.update(dis_add=False)
+				content_list.update(add_time=datetime.now())
+				return
+		bookmark_item = BookmarkItem(user_num=user_num, content=content, dis_add=False)
+		bookmark_item.save()
+		self.items.append(bookmark_item)
+
+	def remove_bookmark(self, user_num, content):
 		for item in self.items:
-			if item.user_num == user_num:
-				histories.append(item)
-		return histories
+			if item.content.id == content.id and item.user_num == user_num:
+				BookmarkItem.objects.filter(user_num=user_num, content_id__exact=content.id).update(dis_add=True)
+				self.items.remove(item)
+				return
+
+	def get_user_bookmark(self, user_num):
+		bookmarks = []
+		for item in self.items:
+			if item.user_num == user_num and not item.dis_add:
+				bookmarks.append(item)
+		return bookmarks
+
+
+class Note(object):
+	def __init__(self, *args, **kwargs):
+		self.items = list(NoteItem.objects.all())
 	
-#	def extend_history(self, contents):
-#		self.items.extend(contents)
+	def add_note(self, user_num, content, text_content):
+		for item in self.items:
+			if item.content.id == content.id and item.user_num == user_num:
+				note_list = NoteItem.objects.filter(user_num=user_num, content_id__exact=content.id)
+				note_list.update(text_content=text_content)
+				note_list.update(dis_add=False)
+				note_list.update(edit_time= datetime.now())
+				return
+		note_item = NoteItem(user_num=user_num, content=content, dis_add=False, text_content=text_content)
+		note_item.save()
+		self.items.append(note_item)
+
+	def remove_note(self, user_num, content):
+		for item in self.items:
+			if item.content.id == content.id and item.user_num == user_num:
+			       	note_list = NoteItem.objects.filter(user_num=user_num, content_id__exact=content.id)
+				note_list.update(text_content='')
+				note_list.update(dis_add=True)
+				self.items.remove(item)
+				return
+	
+	def get_user_note(self, user_num):
+		notes = []
+		for item in self.items:
+			if item.user_num == user_num and not item.dis_add:
+				notes.append(item)
+		return notes
+
+	
+	
+		
+		
+		
+				
+		
+			
+
+
+
 
 
 

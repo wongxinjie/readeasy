@@ -12,19 +12,62 @@
 {% endfor %}
 </h5>
 <h5>ISBN: &nbsp;&nbsp;{{ book.isbn }}</h5>
+<h5>豆瓣评分:&nbsp;&nbsp;&nbsp; {{ book_info.average }}&nbsp;&nbsp;&nbsp;({{book_info.votes}}人评价)</h5>
+<h5><a href=" {{ book_info.url }}" target="_blank">去 《{{book.caption }}》豆瓣读书主页</a></h5>
 <p>简介:</p>
 {% load markup %}
 <p>{{ book.brief_desc|markdown }}</p>
 {% if user.is_authenticated %}
 <p><a href="{% url collect book.id %}" class="btn btn-info btn-sm pull-right">收藏</a></p>
 <br/></br>
+{% else %}
+<p><button  class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#loginModal">收藏</button></p>
+
+<!--modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="#loginModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h5 class="modal-title" id="loginModalLabel">您还没有登录(ÒωÓױ)</h5>
+			</div>
+			<div class="modal-footer">
+			<a href="/user/login/" class="btn btn-primary">朕这就去登录</a>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">朕知道了，不想登录(ฅ´ω`ฅ) </button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br/><br/>
 {% endif %}
 <p>目录</p>
 <p>
 {% for content in content_list %}
+<span class="catalogue">
 <a href="{% url read_page content.id %}" target="_blank"> {{ content.title }}</a><br>
+</span>
 {% endfor %}
 </p>
+<span class="more">更多(...)</span>
+<span class="less">收起(...)</span>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('span.catalogue:gt(5)').hide();
+		$('span.less').hide();
+		$('span.more').click(function(){
+			$('span.catalogue:gt(5)').show();
+			$(this).hide();
+			$('span.less').show();
+		});
+		$('span.less').click(function(){
+			$('span.catalogue:gt(5)').hide();
+			$(this).hide();
+			$('span.more').show();
+		});
+	});
+</script>
 {% endblock %}
+
 
 

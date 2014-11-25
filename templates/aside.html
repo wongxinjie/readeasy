@@ -3,14 +3,57 @@
 	<div class="list-group">
 	<center>
 	<a href="{% url view_collection %}" class="list-group-item">我的收藏</a>
-	<a href="{% url view_history %}" class="list-group-item">阅读历史</a>
+	<a href="{% url view_bookmark %}" class="list-group-item">我的书签</a>
+	<a href="{% url view_note %}" class="list-group-item">我的笔记</a>
 	</center>
 	</div>
 {% else %}
-<blockquote>
-<p>首先，易读是一个在线阅读网站；</p>
-<p>然后， 登录之后有更多的功能。</p>
-</blockquote>
+<h3 style="text-align:center">易 迹</h3>
+	<div class="list-group">
+	<center>
+	<span  class="list-group-item" data-toggle="modal" data-target="#loginModal">我的收藏</span>
+	<span class="list-group-item" data-toggle="modal" data-target="#loginModal">我的书签</span>
+	<span  class="list-group-item" data-toggle="modal" data-target="#loginModal">我的笔记</span>
+	</center>
+	</div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="#loginModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h5 class="modal-title" id="loginModalLabel">您还没有登录(ÒωÓױ)</h5>
+			</div>
+			<div class="modal-footer">
+			<a href="/user/login/" class="btn btn-primary">朕这就去登录</a>
+			<button type="button" class="btn btn-danger" data-dismiss="modal">朕知道了，不想登录(ฅ´ω`ฅ) </button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endif %}
+	{% if book_info %}
+	<p></p>
+{% autoescape off %}
+<blockquote>
+<p>哪儿有卖？</p>
+{% for info in book_info.buy_info %}
+<small>{{ info }}
+</div></a>
+</small>
+{% endfor %}
+</blockquote>
+<br/>
+<blockquote>
+<p>去哪儿借？</p>
+<ol>
+{% for b_info in book_info.borrow_info %}
+{{ b_info }}
+{% endfor %}
+</ol>
+</blockquote>
+{% endautoescape %}
+	{% endif %}
 
 

@@ -87,13 +87,18 @@ class UserCreateForm(UserCreationForm):
 		else:
 			cleaned_data = super(UserCreateForm, self).clean()
 		return cleaned_data
-				
-	
-	#def save(self, commit=True):
-	#	user = super(UserCreationForm, self).save(commit=False)
-	#	user.set_password(self.clean_data['password1'])
-	#	user.is_staff = False
-	#	if commit:
-	#		user.save()
-	#	return user
+			
+
+class NoteForm(forms.Form):
+	content = forms.CharField(
+		required = True,
+		widget = forms.Textarea(attrs={'cols': 67, 'rows': 20, 'style':'resize:none; overflow-y:auto'})
+	)
+
+	def clean(self):
+		if not self.is_valid():
+			raise forms.ValidationError(u"信息填写不正确-_-")
+		else:
+			cleaned_data = super(NoteForm, self).clean()
+		return cleaned_data
 

@@ -9,12 +9,41 @@
 {% bootstrap_stylesheet_tag %}
 {% bootstrap_stylesheet_tag "responsive" %}
 <link rel = "stylesheet" href="/static/css/base.css">
-<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/favicon.ico">
+<script src="/static/js/jquery.min.js"></script>
+<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/r_favicon.ico">
 <style type="text/css">
       .container{
 		width: 600px;
 	}
 </style>
+<script type="text/javascript">
+	$(function(){
+		$('form :input').blur(function(){
+			var $parent = $(this).parent();
+			$parent.find(".formtips").remove();
+			
+			if($(this).is('#id_username')){
+				if(/^\w+$/.test(this.value) == false){
+					$parent.append('<span class="formtips onError">用户名不正确</span>');
+				}
+			}
+			
+			if($(this).is('#id_password')){
+				if(this.value == ""){
+					$parent.append('<span class="formtips onError">密码不能为空</span>');
+				}
+			}
+		});
+		
+		$('input:last').click(function(){
+			$("form :input").trigger('blur');
+			var error = $('form .onError').length;
+			if( error ){
+				return false;
+			}
+		});
+	});
+</script>
 {% bootstrap_javascript_tag %}
 <title>登录</title>
 </head>
@@ -28,6 +57,7 @@
 	</div>
 {% endif %}
 <h2 style="text-align:center">易读</h2>
+<div id="msg"></div>
 <div class="well">
 <form class="form-horizontal" action="{% url user_login %}" method="post">{% csrf_token %}
 	{{ form|as_bootstrap:"horizontal" }}
@@ -39,6 +69,7 @@
 </div>
 </div>
 </div>
+	
 {% include "footer.html" %}
 </body>
 </html>

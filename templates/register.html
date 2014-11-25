@@ -9,12 +9,68 @@
 {% bootstrap_stylesheet_tag %}
 {% bootstrap_stylesheet_tag "responsive" %}
 <link rel = "stylesheet" href="/static/css/base.css">
-<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/favicon.ico">
+<script src="/static/js/jquery.min.js"></script>
+<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/r_favicon.ico">
 <style type="text/css">
       .container{
 		width: 600px;
 	}
 </style>
+<script type="text/javascript">
+	$(function(){
+		$('form :input').blur(function(){
+			var $parent = $(this).parent();
+			$parent.find(".formtips").remove();
+			
+			if($(this).is('#id_username')){
+				reg = /^\w+$/;
+				if(reg.test(this.value)==false){
+					var errorMsg='用户名不正确';
+					$parent.append('<span class="formtips onError">'+errorMsg+'</span>');
+				}else{
+					var okMsg='OK';
+					$parent.append('<span class="formtips onSuccess">'+okMsg+'</span>');
+				}
+			}
+			
+			if($(this).is('#id_email')){
+				if(this.value != "" &&  /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/.test(this.value) == false){
+					var errorMsg = '请输入正确的邮箱地址';
+					$parent.append('<span class="formtips onError">'+errorMsg+'</span>');
+				}
+			}
+
+			if($(this).is('#id_password1')){
+				if(this.value == ""){
+					$parent.append('<span class="formtips onError">密码不能为空</span>');
+				}else if(this.value.length < 6){
+					$parent.append('<span class="formtips onError">密码长度不够</span>');
+				}else{
+					var okMsg = 'OK';
+					$parent.append('<span class="formtips onSuccess">'+okMsg+'</span>');
+				}
+			}
+			
+			if($(this).is('#id_password2')){
+				var password = $('#id_password1').val();
+				if(this.value != password){
+					$parent.append('<span class="formtips onError">输入密码不一致</span>');
+				}else{
+					$parent.append('<span class="formtips onSuccess">OK</span>');
+				}
+			}
+		});
+
+		$('input:last').click(function(){
+			$("form :input").trigger('blur');
+			var numError = $('form .onError').length;
+			if( numError){
+				return false;
+			}
+		});
+	});
+</script>		
+					
 {% bootstrap_javascript_tag %}
 <title>注册</title>
 </head>

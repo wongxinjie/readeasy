@@ -12,9 +12,10 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
 from bootstrap_toolkit.widgets import BootstrapUneditableInput
-from models import Book, Category, Author, Content, CollectionItem, ReadHistoryItem
-from forms import LoginForm, UserCreateForm
-from items import Collection, ReadHistory
+from models import Book, Category, Author, Content, CollectionItem, BookmarkItem, NoteItem 
+from forms import LoginForm, UserCreateForm, NoteForm
+from items import Collection, Bookmark, Note
+from book_info import BookInfo
 
 def book_list(request):
 	book_list = Book.objects.all()
@@ -27,28 +28,35 @@ def book_show(request, id=''):
 		book = Book.objects.get(id=id)
 		categories = Category.objects.all()
 		content_list = book.content_set.all()
+		if book.isbn in request.session:
+			bookInfo = request.session.get(book.isbn)
+		else:
+			bookInfo = BookInfo(book.isbn)
+			bookInfo.get_book_info()
+			request.session[book.isbn] = bookInfo
 	except Book.DoesNotExist:
 		raise Http404
-	return render_to_response("book_show.html", {"book": book, "categories": categories, "content_list": content_list}, RequestContext(request, ))
+	return render_to_response("book_show.html", {"book": book, "categories": categories, "content_list": content_list, "book_info":bookInfo}, RequestContext(request, ))
 
 
 def read_page(request, id=''):
 	try:
 		content = Content.objects.get(id=id)
-		if request.user.is_authenticated():
-			user_num = request.user.id
-			history = ReadHistory()
-			history.add_content(user_num, content)
 	except Content.DoesNotExist:
 		raise Http404
-	return render_to_response("read_page.html", {"content": content})
+	if request.user.is_authenticated():
+		form = NoteForm()
+		return render_to_response("read_page.html", {"content": content}, RequestContext(request, {"form": form, }))
+	else:
+		return render_to_response("read_page.html", {"content": content}, RequestContext(request, ))
+
 
 def read(request, id=''):
 	try:
 		book = Book.objects.get(id=id)
 		content = book.content_set.all()[0]
 	except Book.DoesNotExist:
-		raise Http404s
+		raise Http404
 	return HttpResponseRedirect("/book/chapter/%d/" % (content.id))
 	
 
@@ -66,6 +74,16 @@ def get_next_content(request, id=''):
 		raise Http404
 	
 	return HttpResponseRedirect("/book/chapter/%d/" % (next_content.id))
+
+def get_content_list(request, id=''):
+	try:
+		content = Content.objects.get(id=id)
+		book = Book.objects.get(id=content.book.id)
+		content_list = book.content_set.all()
+	except Content.DoesNotExist:
+		raise Http404
+
+	return render_to_response("content_list.html", {"book": book, "content_list": content_list}, RequestContext(request, ))
 
 def category(request, id=''):
 	cut_category = Category.objects.get(id=id)
@@ -145,6 +163,43 @@ def user_logout(request):
 		pass
 	return HttpResponseRedirect("/")
 
+
+@login_required(login_url='/user/login/')
+def take_note(request, id=''):
+	content = Content.objects.get(id=id)
+	user_num = request.user.id
+	if request.method == 'CET':
+		form = NoteForm()
+		return render_to_responsen("read_page.html", {"content": content}, RequestContext(request, {"form": form, }))
+	else:
+		form = NoteForm(request.POST)
+		if form.is_valid():
+			clean_data = form.clean()
+			text_content = clean_data['content']
+			note = Note()
+			note.add_note(user_num, content, text_content)
+			return HttpResponseRedirect("/book/chapter/%d/" % (content.id))
+		else:
+			return render_to_response("read_page.html", {"content": content}, RequestContext(request, {"form": form, }))
+
+@login_required(login_url='/user/login/')
+def delete_note(request, id=''):
+	content = Content.objects.get(id=id)
+	user_num = request.user.id
+	note = Note()
+	note.remove_note(user_num, content)
+	note_list = note.get_user_note(user_num)
+	return HttpResponseRedirect("/user/note/")
+
+@login_required(login_url='/user/login/')
+def view_note(request):
+	categories = Category.objects.all()
+	user_num = request.user.id
+	note = Note()
+	note_list = note.get_user_note(user_num)
+	return render_to_response("view_note.html", {"note_list": note_list, "categories": categories}, RequestContext(request, ))
+	
+		
 @login_required(login_url='/user/login/')
 def collect(request, id=''):
 	book = Book.objects.get(id=id)
@@ -172,15 +227,30 @@ def view_collection(request):
 		
 	return render_to_response("view_collection.html", {"collection_list": collection_list, "categories": categories}, RequestContext(request, ))
 
+@login_required(login_url='/user/login/')
+def mark(request, id=''):
+	content = Content.objects.get(id=id)
+	user_num = request.user.id
+	bookmark = Bookmark()
+	bookmark.add_bookmark(user_num, content)
+	return HttpResponseRedirect("/book/chapter/%d/" % (content.id))
 
 @login_required(login_url='/user/login/')
-def view_history(request):
+def dis_mark(request, id=''):
+	content = Content.objects.get(id=id)
+	user_num = request.user.id
+	bookmark = Bookmark()
+	bookmark.remove_bookmark(user_num, content)
+	bookmark_list = bookmark.get_user_bookmark(user_num)
+	return HttpResponseRedirect("/user/bookmark/")
+
+@login_required(login_url='/user/login/')
+def view_bookmark(request):
 	categories = Category.objects.all()
 	user_num = request.user.id
-	history = ReadHistory()
-	history_list = history.get_user_history(user_num)
-
-	return render_to_response("view_history.html", {"history_list": history_list, "categories": categories}, RequestContext(request, ))
+	bookmark = Bookmark()
+	bookmark_list = bookmark.get_user_bookmark(user_num)
+	return render_to_response("view_bookmark.html", {"bookmark_list": bookmark_list, "categories": categories}, RequestContext(request, ))
 
 @login_required(login_url='/user/login/')
 def account(request):

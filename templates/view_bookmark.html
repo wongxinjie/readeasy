@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} 我的书签{% endblock %}
+
+{% block content %}
+
+<h3>我的书签</h3>
+<ul class="list-group">
+{% for bookmark in bookmark_list %}
+<li class="list-group-item">
+<a href="{% url read_page bookmark.content.id %}">{{ bookmark.content.title }} </a>&nbsp;&nbsp;
+<small>添加于:{{ bookmark.add_time|date:"Y年m月d日 H时i分" }}</small>
+<a href="{% url dis_mark bookmark.content.id %}" class="btn btn-danger btn-xs pull-right">取消</a>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}
+

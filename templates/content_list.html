@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="easy-reading with django"/>
+<meta name="author" content="Vagrant Wong">
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/static/css/page.css">
+<link rel="shortcut icon" href="http://readeasy-readeasy.stor.sinaapp.com/img/r_favicon.ico">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<title> {% block title %} {{ book.caption }} 目录{% endblock %}</title>
+</head>
+
+<body>
+<div class="container">
+<h1 style="text-align:center"> {{ book.caption }} </h1>
+<div class="list-group">
+{% for content in content_list %}
+<a href="{% url read_page content.id %}" class="list-group-item">{{ content.title }}</a>
+{% endfor %}
+<span class="more list-group-item">更多...</span>
+<span class="less list-group-item">收起...</span>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('a:gt(10)').hide();
+			$('span.less').hide();
+			$('span.more').click(function(){
+				$('a:gt(10)').show();
+				$(this).hide();
+				$('span.less').show();
+			});
+			$('span.less').click(function(){
+				$('a:gt(10)').hide();
+				$(this).hide();
+				$('span.more').show();
+			});
+	});
+</script>
+</div>
+
+</body>
+</html>
+
+
+
+
+

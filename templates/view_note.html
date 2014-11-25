@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %} 我的笔记{% endblock %}
+
+{% block content %}
+
+<h3>我的笔记</h3>
+<div class="panel-group" id="accordion">
+{% for note in note_list %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+	<h4 class="panel-title">
+	<a data-toggle="collapse" data-parent="#accordion" href="#note_{{ note.content.id }}">{{ note.content.book.caption }}</small></a></h4>
+	</div>
+	<div id="note_{{ note.content.id }}" class="panel-collapse collapse">
+	<div class="panel-body">
+	{%  load markup %}
+	{{ note.text_content|markdown }}<br>
+	<p class="text-right">相关章节：<cite>{{ note.content.title }}</cite><br>
+	<cite>时间：{{ note.edit_time|date:"Y年m月d日 H时i分" }}</cite></p>
+	<a href="{% url delete_note note.content.id %}" class="btn btn-danger pull-right">删除</a>
+	</div>
+	</div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
+
+
+
+
